@@ -80,17 +80,14 @@ def render_board(boggle_board, cursor, term):
     border_right = "╣"
     junction = "╬"
 
-    top_row = (border_top +
-               3 * horizontal_line) * boggle_board.SIZE + ur_corner
-    top_row = ul_corner + top_row[1:]
+    top_row = (border_top + 3 * horizontal_line) * boggle_board.SIZE
+    top_row = ul_corner + top_row[1:] + ur_corner
 
-    bot_row = (border_bot +
-               3 * horizontal_line) * boggle_board.SIZE + lr_corner
-    bot_row = ll_corner + bot_row[1:]
+    bot_row = (border_bot + 3 * horizontal_line) * boggle_board.SIZE
+    bot_row = ll_corner + bot_row[1:] + lr_corner
 
-    line_row = (junction +
-                3 * horizontal_line) * boggle_board.SIZE + border_right
-    line_row = border_left + line_row[1:]
+    line_row = (junction + 3 * horizontal_line) * boggle_board.SIZE
+    line_row = border_left + line_row[1:] + border_right
 
     echo(top_row)
     for y in range(boggle_board.SIZE):
@@ -150,7 +147,7 @@ def render_footer(boggle_board, cursor, term):
         new = boggle_board.last_solution[word_i] + ", "
         word_i += 1
 
-        if len(p) + len(new) < term.width:
+        if len(p) + len(new) <= term.width:
             p += new
             continue
 
@@ -173,18 +170,15 @@ def render_side_pane(boggle_board, cursor, term):
     echo(term.move_yx(1, column) + "CLI Boggle Helper")
     echo(term.move_yx(2, column) + "By J. Bremen")
 
-    echo(term.move_yx(4, column))
-    echo("ESC to exit")
-    echo(term.move_yx(5, column))
-    echo("Arrow keys to navigate")
-    echo(term.move_yx(6, column))
-    echo("Press letter to place ")
-    echo(term.move_yx(7, column))
+    echo(term.move_yx(4, column) + "ESC to exit")
+    echo(term.move_yx(5, column) + "Arrow keys to navigate")
+    echo(term.move_yx(6, column) + "Press letter to place ")
 
+    echo(term.move_yx(7, column))
     refresh_symbol = term.reverse_green("On")
     if not boggle_board.auto_refresh:
         refresh_symbol = term.reverse_red("Off")
-    echo(f"TAB toggles auto refresh ({refresh_symbol})")
+    echo(f"TAB toggles auto refresh ({refresh_symbol}) ")
 
     echo(term.move_yx(8, column))
     echo(f"Press 1-9 to clear adjust size ({boggle_board.SIZE})")
@@ -200,11 +194,6 @@ def render_entire_scene(boggle_board, cursor, term):
     render_side_pane(boggle_board, cursor, term)
 
     render_footer(boggle_board, cursor, term)
-
-
-# def cursor_hide(boggle_board, cursor, term):
-#     print(term.move_yx(0, term.width - 2) + "  ", end="", flush=True)
-#     print(term.move_yx(0, term.width - 2), end="", flush=True)
 
 
 def main():
@@ -225,11 +214,20 @@ def main():
     pressed_letter_flag = False
     tab_flag = False
 
+    P_WIDTH, P_HEIGHT = term.width, term.height
+
     with term.hidden_cursor(), term.cbreak(), term.fullscreen():
         while loop:
+            if term.width != P_WIDTH or term.height != P_HEIGHT:
+                update_flag = True
+                P_WIDTH, P_HEIGHT = term.width, term.height
+
             if update_flag:
                 render_entire_scene(boggle_board, cursor, term)
                 update_flag = False
+                moved_cursor_flag = False
+                pressed_letter_flag = False
+                tab_flag = False
 
             if moved_cursor_flag:
                 render_letters(boggle_board, cursor, term)
@@ -297,6 +295,7 @@ def main():
                 loop = False
             elif inp_name == "KEY_ENTER":
                 boggle_board.solve(solve_board)
+                pressed_letter_flag = True
             elif inp_name in ("KEY_DELETE", "KEY_BACKSPACE"):
                 boggle_board.board[cursor.x][cursor.y] = " "
 

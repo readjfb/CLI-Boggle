@@ -1,6 +1,7 @@
-'''Made by Jackson Bremen ||| Written Summer 2018, Refactored Winter 2020
-Trie Datastructure used from github below, additional functionality added
-https://www.wordplays.com/boggle has line crossing be legal
+'''
+Made by Jackson Bremen
+Written Summer 2018, Refactored Winter 2020, refactored Summer 2021
+Trie Datastructure used from vivekn github below, additional functionality added
 '''
 
 import readline
@@ -56,8 +57,8 @@ def adjacent(val1, val2, lst):
 
 def solve_board(board):
     def turtle(board, x, y, inv_spaces, letters=''):
-        # Make copies of the inputs, so that we're not modifying the orignals
-        inv_spaces = list(inv_spaces)
+        # Make a copy of the input, so that we're not modifying the orignals
+        inv_spaces = [*inv_spaces]
 
         #crossing lets the path cross over itself diagonaly [if true];
         # min_num_lett is the min number of letters for a word
@@ -140,7 +141,7 @@ def solve_board(board):
 
     for x, y_l in enumerate(board):
         for y, x_l in enumerate(y_l):
-            turtle(board, x, y, [i for i in board_exterior])
+            turtle(board, x, y, [*board_exterior])
 
     return all_words
 
