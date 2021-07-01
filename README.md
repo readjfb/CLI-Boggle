@@ -1,5 +1,5 @@
 # CLI-Boggle
-Python 3 program to solve a boggle board input within the command line interface. CLI using the Blessed Library. Developed using a modified Boggle solving algorithm that I wrote a few years ago, using a Trie datastructure for fast word verification. It should work accross Mac, Linux, and PC platforms.
+Python 3 program to solve a boggle board input within the command line interface. CLI using the Blessed Library. Developed using a backtracking Boggle solving algorithm that I wrote a few years ago, using a Trie datastructure for fast word verification. It should work accross Mac, Linux, and PC platforms.
 
 ![Boggle Demo](https://user-images.githubusercontent.com/15671813/124036454-a5e48880-d9c3-11eb-9b46-6ee20e922aba.gif)
 
