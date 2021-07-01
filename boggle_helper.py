@@ -4,13 +4,13 @@ https://www.wordplays.com/boggle has line crossing be legal
 '''
 
 import readline
-from functools import reduce
+
 
 class Trie(object):
     # https://github.com/vivekn/autocomplete/blob/master/trie.py#L11
     def __init__(self):
         self.children = {}
-        self.flag = False # Flag to represent that a word ends at this node
+        self.flag = False  # Flag to represent that a word ends at this node
 
     def add(self, char):
         self.children[char] = Trie()
@@ -31,7 +31,7 @@ class Trie(object):
             node = node.children[char]
         return node.flag
 
-    def one_autocomplete(self,prefix):
+    def one_autocomplete(self, prefix):
         node = self
         for char in prefix:
             if char not in node.children:
@@ -39,10 +39,12 @@ class Trie(object):
             node = node.children[char]
         return True
 
+
 dictionary = Trie()
 with open('allScrabbleWords.txt', 'r') as file:
     for i in file.read().split():
         dictionary.insert(i)
+
 
 def adjacent(val1, val2, lst):
     try:
@@ -54,6 +56,9 @@ def adjacent(val1, val2, lst):
 
 def solve_board(board):
     def turtle(board, x, y, inv_spaces, letters=''):
+        # Make copies of the inputs, so that we're not modifying the orignals
+        inv_spaces = list(inv_spaces)
+
         #crossing lets the path cross over itself diagonaly [if true];
         # min_num_lett is the min number of letters for a word
         crossing, min_num_lett = True, 3
@@ -73,7 +78,6 @@ def solve_board(board):
         p0 p1 p2
         p3 X  p4
         p5 p6 p7
-
         '''
         p0 = (x - 1, y - 1)
         p1 = (x, y - 1)
@@ -85,43 +89,43 @@ def solve_board(board):
         p7 = (x + 1, y + 1)
 
         if p4 not in inv_spaces:
-            turtle(board, *p4, list(inv_spaces), str(letters))
+            turtle(board, *p4, inv_spaces, letters)
 
         if p3 not in inv_spaces:
-            turtle(board, *p3, list(inv_spaces), str(letters))
+            turtle(board, *p3, inv_spaces, letters)
 
         if p1 not in inv_spaces:
-            turtle(board, *p1, list(inv_spaces), str(letters))
+            turtle(board, *p1, inv_spaces, letters)
 
         if p6 not in inv_spaces:
-            turtle(board, *p6, list(inv_spaces), str(letters))
+            turtle(board, *p6, inv_spaces, letters)
 
         if not crossing:
             if p0 not in inv_spaces and not adjacent(p3, p1, inv_spaces):
-                turtle(board, *p0, list(inv_spaces), str(letters))
+                turtle(board, *p0, inv_spaces, letters)
 
             if p2 not in inv_spaces and not adjacent(p4, p1, inv_spaces):
-                turtle(board, *p2, list(inv_spaces), str(letters))
+                turtle(board, *p2, inv_spaces, letters)
 
             if p5 not in inv_spaces and not adjacent(p3, p6, inv_spaces):
-                turtle(board, *p5, list(inv_spaces), str(letters))
+                turtle(board, *p5, inv_spaces, letters)
 
             if p7 not in inv_spaces and not adjacent(p4, p6, inv_spaces):
-                turtle(board, *p7, list(inv_spaces), str(letters))
+                turtle(board, *p7, inv_spaces, letters)
 
         else:
             #diagonals, allows crossing over
             if p0 not in inv_spaces:
-                turtle(board, *p0, list(inv_spaces), str(letters))
+                turtle(board, *p0, inv_spaces, letters)
 
             if p2 not in inv_spaces:
-                turtle(board, *p2, list(inv_spaces), str(letters))
+                turtle(board, *p2, inv_spaces, letters)
 
             if p5 not in inv_spaces:
-                turtle(board, *p5, list(inv_spaces), str(letters))
+                turtle(board, *p5, inv_spaces, letters)
 
             if p7 not in inv_spaces:
-                turtle(board, *p7, list(inv_spaces), str(letters))
+                turtle(board, *p7, inv_spaces, letters)
 
     # all_words is global, as lists are global by default in python
     all_words = set([])
