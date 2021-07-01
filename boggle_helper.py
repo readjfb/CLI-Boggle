@@ -1,13 +1,12 @@
 '''
 Made by Jackson Bremen
 Written Summer 2018, Refactored Winter 2020, refactored Summer 2021
-Trie Datastructure used from vivekn github below, additional functionality added
+Trie Datastructure used from vivekn (github below)
+Considerable additional functionality added
 '''
 
-import readline
 
-
-class Trie(object):
+class Trie:
     # https://github.com/vivekn/autocomplete/blob/master/trie.py#L11
     def __init__(self):
         self.children = {}
@@ -75,11 +74,11 @@ def solve_board(board):
         #if there are no more possible words
         elif not dictionary.one_autocomplete(letters):
             return 0
-        '''
-        p0 p1 p2
-        p3 X  p4
-        p5 p6 p7
-        '''
+
+        # p0 p1 p2
+        # p3 X  p4
+        # p5 p6 p7
+
         p0 = (x - 1, y - 1)
         p1 = (x, y - 1)
         p2 = (x + 1, y - 1)
@@ -149,18 +148,19 @@ def solve_board(board):
 def score_calc(words):
     val_table = {0: 0, 1: 0, 2: 0, 3: 1, 4: 1, 5: 2, 6: 3, 7: 5, 8: 11}
     total = 0
-    numChars = 0
+    num_chars = 0
     for item in words:
         if len(item) not in val_table:
             total += 11
         else:
             total += val_table[len(item)]
-        numChars += len(item)
-    return total, numChars
+        num_chars += len(item)
+    return total, num_chars
 
 
 if __name__ == "__main__":
-    print_board(board)
+    board = [["D", "O"], ["G", "S"]]
+
     solution = solve_board(board)
     print(len(solution), len(set(solution)))
     print(','.join(solution), '\n', len(solution), 'words, max score is:',

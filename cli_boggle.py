@@ -136,10 +136,11 @@ def render_footer(boggle_board, cursor, term):
     word_i = 0
     p = ""
 
+    len_solution = len(boggle_board.last_solution)
+    last_time = boggle_board.last_time
+
     echo(term.move_yx(row_i, 0))
-    echo(
-        f"Found {len(boggle_board.last_solution)} words in {boggle_board.last_time:.2f} ms"
-    )
+    echo(f"Found {len_solution} words in {last_time:.2f} ms")
     row_i += 1
     echo(term.move_yx(row_i, 0))
 
@@ -246,7 +247,7 @@ def main():
 
                 tab_flag = False
 
-            inp = term.inkey(timeout=10)
+            inp = term.inkey(timeout=None)
 
             if not inp:
                 continue
