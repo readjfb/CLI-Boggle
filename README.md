@@ -9,7 +9,7 @@ Python 3 program to solve a boggle board input within the command line interface
 2. Navigate to the directory in your preferred terminal
 
 ## Program Use
-1. Run the program with python cli_boggle.py, or however you choose to run your python files
+1. Run the program with `python cli_boggle.py`, or however you choose to run your python files
 2. Select your board size by pressing the number that corresponds to the width and height of the board
 3. Using the arrow keys, move the cursor (denoted by the highlighted square). 
 4. Press the letter key when in the desired square to fill in the board
