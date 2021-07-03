@@ -1,9 +1,9 @@
-'''
+"""
 Made by Jackson Bremen
 Written Summer 2018, Refactored Winter 2020, refactored Summer 2021
 Trie Datastructure used from vivekn (github below)
 Considerable additional functionality added
-'''
+"""
 
 
 class Trie:
@@ -41,25 +41,25 @@ class Trie:
 
 
 dictionary = Trie()
-with open('allScrabbleWords.txt', 'r') as file:
+with open("allScrabbleWords.txt", "r") as file:
     for i in file.read().split():
         dictionary.insert(i)
 
 
 def adjacent(val1, val2, lst):
     try:
-        return (lst.index(val1) - lst.index(val2) in [-1, 1])
+        return lst.index(val1) - lst.index(val2) in [-1, 1]
     except ValueError:
         return False
     return False
 
 
 def solve_board(board):
-    def turtle(board, x, y, inv_spaces, letters=''):
+    def turtle(board, x, y, inv_spaces, letters=""):
         # Make a copy of the input, so that we're not modifying the orignals
         inv_spaces = [*inv_spaces]
 
-        #crossing lets the path cross over itself diagonaly [if true];
+        # crossing lets the path cross over itself diagonaly [if true];
         # min_num_lett is the min number of letters for a word
         crossing, min_num_lett = True, 3
 
@@ -71,7 +71,7 @@ def solve_board(board):
         if dictionary.contains(letters) and len(letters) >= min_num_lett:
             all_words.add(letters)
 
-        #if there are no more possible words
+        # if there are no more possible words
         elif not dictionary.one_autocomplete(letters):
             return 0
 
@@ -114,7 +114,7 @@ def solve_board(board):
                 turtle(board, *p7, inv_spaces, letters)
 
         else:
-            #diagonals, allows crossing over
+            # diagonals, allows crossing over
             if p0 not in inv_spaces:
                 turtle(board, *p0, inv_spaces, letters)
 
@@ -163,5 +163,11 @@ if __name__ == "__main__":
 
     solution = solve_board(board)
     print(len(solution), len(set(solution)))
-    print(','.join(solution), '\n', len(solution), 'words, max score is:',
-          str(score_calc(solution)), 'characters')
+    print(
+        ",".join(solution),
+        "\n",
+        len(solution),
+        "words, max score is:",
+        str(score_calc(solution)),
+        "characters",
+    )

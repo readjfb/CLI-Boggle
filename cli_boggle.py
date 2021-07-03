@@ -4,11 +4,19 @@ import time
 
 
 class BoggleBoard:
+    """
+    A class to represent a boggle_board setup
+
+    Attributes:
+        board (list): 2D array that holds chars of board
+        SIZE (int): width and height of the board
+        last_soluton (list): List of found words
+        last_time (float): Time taken on last solve
+    """
     def __init__(self, size):
         self.SIZE = size
 
-        self.board = [[" " for x in range(self.SIZE)]
-                      for y in range(self.SIZE)]
+        self.board = [[" " for x in range(self.SIZE)] for y in range(self.SIZE)]
 
         self.last_solution = []
 
@@ -17,6 +25,11 @@ class BoggleBoard:
         self.auto_refresh = True
 
     def solve(self, solver):
+        """Takes in a method to solve the boggle board, updates internal last solution accordingly
+
+        Args:
+            solver (function): Takes in a boggle board in n x n array format, returns list of words
+        """
         start_time = time.time()
         self.last_solution = list(solver(self.board))
 
@@ -27,8 +40,10 @@ class BoggleBoard:
         self.last_time = elapsed * 1000
 
     def clear_board(self):
-        self.board = list([[" " for x in range(self.SIZE)]
-                           for y in range(self.SIZE)])
+        """
+        Overwrites internal board according to it's SIZE to clear board.
+        """
+        self.board = list([[" " for x in range(self.SIZE)] for y in range(self.SIZE)])
 
 
 class Cursor:
@@ -63,11 +78,24 @@ class Cursor:
         return False
 
 
-def echo(str):
-    print(str, end="")
+def echo(message):
+    """Prints arguement message, with no end char; does not flush buffer
+
+    Args:
+        message (str): [description]
+    """
+    print(message, end="", flush=False)
 
 
 def render_board(boggle_board, cursor, term):
+    """Render an empty boggle board in the terminal window size from boggle_board/
+
+    Keyword arguments:
+    boggle_board -- Will take the size of the board frodm this boggle_board param.
+    cursor -- Unused
+    term -- Terminal.terminal window that will be drawn on
+    """
+
     vertical_line = "║"
     horizontal_line = "═"
     ul_corner = "╔"
@@ -104,6 +132,13 @@ def render_board(boggle_board, cursor, term):
 
 
 def render_letters(boggle_board, cursor, term):
+    """Renders the letters and cursorfrom the boggle board onto the terminal.
+
+    Keyword arguments:
+    boggle_board -- Renders letters from boggle_board.board
+    cursor -- Renders cursor from cursor.x and cursor.y
+    term -- Terminal.terminal window that will be drawn on
+    """
     for y in range(boggle_board.SIZE):
 
         for x in range(boggle_board.SIZE):
@@ -124,6 +159,13 @@ def render_letters(boggle_board, cursor, term):
 
 
 def render_footer(boggle_board, cursor, term):
+    """Renders the footer and found words onto the terminal
+
+    Keyword arguments:
+    boggle_board -- Renders found words from boggle_board.last_solution
+    cursor -- Unused
+    term -- Terminal.terminal window that will be drawn on
+    """
 
     row_i = boggle_board.SIZE * 2 + 2
     row_i = max(row_i, 11)
@@ -161,12 +203,20 @@ def render_footer(boggle_board, cursor, term):
         echo(term.move_yx(row_i, 0))
     print(p, flush=False)
 
-    print(f"{len(boggle_board.last_solution) - word_i} words omitted",
-          end="",
-          flush=True)
+    print(
+        f"{len(boggle_board.last_solution) - word_i} words omitted", end="", flush=True
+    )
 
 
 def render_side_pane(boggle_board, cursor, term):
+    """Renders the sidebar help info onto the terminal from attributes.
+
+    Keyword arguments:
+    boggle_board -- Renders info fron boggle_board.auto_refresh, boggle_board.SIZE
+    cursor -- Unused
+    term -- Terminal.terminal window that will be drawn on
+    """
+
     column = boggle_board.SIZE * 4 + 2 + 4
     echo(term.move_yx(1, column) + "CLI Boggle Helper")
     echo(term.move_yx(2, column) + "By J. Bremen")
@@ -198,6 +248,7 @@ def render_entire_scene(boggle_board, cursor, term):
 
 
 def main():
+    """Main program entry point."""
     SIZE = 4
 
     term = Terminal()
